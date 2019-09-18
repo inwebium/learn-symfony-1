@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block breadcrumbs %}
+    {{ include('common/breadcrumbs.html.twig', { 'breadcrumbs': breadcrumbs }) }}
+{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <h1>{{ post.title }}</h1>
+        <div>
+            {{ post.content | raw }}
+        </div>
+        <div class="text-muted text-small">
+            {{ post.createdAt|date("m/d/Y H:i") }}
+        </div>
+    </div>
+{% endblock %}

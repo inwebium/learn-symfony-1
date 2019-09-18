@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ entity.name }} entity{% endblock %}
+
+{% block main %}
+    <h1>{{ entity.name }}</h1>
+    <div><span class="text-small text-muted">({{ entity.fileName }})</span></div>
+    <h2>DocBlock</h2>
+    <div class="bg-light text-muted text-small bg">
+        <pre><code>{{ entity.comment }}</code></pre>
+    </div>
+    <h2>Fields</h2>
+    <div>
+        <table class="table table-responsive table-striped">
+            {% for field in entity.fields %}
+                <tr>
+                    <td>{{ field.name }}</td>
+                    <td>{{ field.type }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

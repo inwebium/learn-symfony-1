@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Latest blog posts{% endblock %}
+
+{% block breadcrumbs %}
+    {{ include('common/breadcrumbs.html.twig', { 'breadcrumbs': breadcrumbs }) }}
+{% endblock %}
+
+{% block main %}
+    <div class="container">
+        {% for post in posts %}
+            <div class="row border border-light">
+                <h2>
+                    {{ post.title }}
+                </h2>
+                <div class="text-muted text-small">
+                    {{ post.createdAt|date("m/d/Y H:i") }}
+                </div>
+                <div>
+                    <a href="{{ path('blog_detail', {'slug': post.slug}) }}" class="btn btn-primary">Read</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
