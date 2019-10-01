@@ -25,6 +25,17 @@ class AppFixtures extends Fixture
             . 'consectetur enim luctus in. Suspendisse convallis facilisis '
             . 'rutrum.</p>';
         
+        $commentContent = [
+            'Wow, this is so cool.',
+            'So good',
+            'Is it true?',
+            'How could you..!',
+            'You all wrong!',
+            'I knew a man who knew a man who did this.',
+            'Already saw it on reddit',
+            'WoW!111! I never thought about thiiis kind of stuffff )))0)0)'
+        ];
+        
         $post = new \App\Entity\Post();
         $post
             ->setContent($content)
@@ -71,6 +82,16 @@ class AppFixtures extends Fixture
                 ->setSlug('post-number-' . $i);
             
             $manager->persist($post);
+            
+            $commentsCount = random_int(1, 5);
+
+            for ($commentsCounter = 0; $commentsCounter < $commentsCount; $commentsCounter++) {
+                $comment = new \App\Entity\Comment();
+                $comment
+                    ->setText($commentContent[random_int(0, 7)])
+                    ->setPost($post);
+                $manager->persist($comment);
+            }
         }
 
         $manager->flush();

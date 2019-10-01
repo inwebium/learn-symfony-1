@@ -84,7 +84,26 @@ class BlogController extends AbstractController
         
         return $this->render('blog/detail.html.twig', [
             'post' => $post,
+            'comments' => $post->getComments(),
             'breadcrumbs' => $this->breadcrumbs
         ]);
+    }
+    
+    /**
+     * @Route(
+     *      "/comment/add", 
+     *      methods={"POST"}, 
+     *      name="comment_add"
+     * )
+     */
+    public function addComment()
+    {
+        $newComment = new \App\Entity\Comment();
+        //$newComment->setPost($post)
+
+        /*$form = $this->createFormBuilder($newComment)
+            ->add('text', TextType::class)
+            ->add('add', SubmitType::class, ['label' => 'Add comment'])
+            ->getForm();*/
     }
 }
