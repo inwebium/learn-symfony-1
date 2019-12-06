@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Entities list{% endblock %}
+
+{% block main %}
+    <h1>Entities list</h1>
+    <table class="table table-responsive table-striped">
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('admin_entities_detail') }}?name={{ entity.name }}">{{ entity.name }}</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
