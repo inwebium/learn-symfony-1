@@ -8,16 +8,34 @@
 
 {% block main %}
     <div class="container">
-        {% for post in posts %}
+        <h1>Here is some lates posts for you</h1>
+        {% for post  in latestPosts %}
             <div class="row border border-light">
-                <h2>
+                <h2 class="col-12">
                     {{ post.title }}
                 </h2>
-                <div class="text-muted text-small">
+                <div class="col-12 text-muted text-small">
                     {{ post.createdAt|date("m/d/Y H:i") }}
                 </div>
-                <div>
-                    <a href="{{ path('blog_detail', {'slug': post.slug}) }}" class="btn btn-primary">Read</a>
+                <div class="col-12 align-items-end">
+                    <a href="{{ path('blog_post', {'slug': post.slug}) }}" class="btn btn-primary">Read</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+        
+    <div class="container">
+        <h1>This is most commented posts today</h1>
+        {% for post in commentedPosts %}
+            <div class="row border border-light">
+                <h2 class="col-12">
+                    {{ post.title }}
+                </h2>
+                <div class="col-12 text-muted text-small">
+                    {{ post.createdAt|date("m/d/Y H:i") }}
+                </div>
+                <div class="col-12 align-items-end">
+                    <a href="{{ path('blog_post', {'slug': post.slug}) }}" class="btn btn-primary">Read</a>
                 </div>
             </div>
         {% endfor %}

@@ -12,7 +12,8 @@ class CommentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('text')
+            ->add('text', \Symfony\Component\Form\Extension\Core\Type\TextType::class)
+            ->add('submit', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
         ;
     }
 

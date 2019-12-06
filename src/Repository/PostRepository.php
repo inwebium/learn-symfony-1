@@ -21,9 +21,25 @@ class PostRepository extends ServiceEntityRepository
     
     public function findLatest($limit = 6)
     {
-        return $this->createQueryBuilder('q')
-            ->orderBy('q.createdAt', 'DESC')
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.createdAt', 'DESC')
             ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findCommented($limit = 6)
+    {
+        return $this->createQueryBuilder('p')
+            ->addSelect('count(c) AS HIDDEN ncomments')
+            ->andWhere('c.createdAt >= :dateCommented')
+            ->leftJoin('p.comments', 'c')
+            ->groupBy('p')
+            ->orderBy('ncomments', 'DESC')
+            ->addOrderBy('p.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->setParameters(['dateCommented' => new \DateTime('today')])
             ->getQuery()
             ->getResult()
         ;
@@ -35,8 +51,8 @@ class PostRepository extends ServiceEntityRepository
             $pageNumber = 1;
         }
         
-        $query = $this->createQueryBuilder('q')
-            ->orderBy('q.createdAt', 'DESC')
+        $query = $this->createQueryBuilder('p')
+            ->orderBy('p.createdAt', 'DESC')
             ->setFirstResult(($pageNumber - 1) * $limit)
             ->setMaxResults($limit)
         ;

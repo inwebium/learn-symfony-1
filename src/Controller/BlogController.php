@@ -33,9 +33,11 @@ class BlogController extends AbstractController
     public function index(\App\Repository\PostRepository $posts) : \Symfony\Component\HttpFoundation\Response
     {
         $latestPosts = $posts->findLatest();
+        $commentedPosts = $posts->findCommented();
 
         return $this->render('blog/index.html.twig', [
-            'posts' => $latestPosts,
+            'latestPosts' => $latestPosts,
+            'commentedPosts' => $commentedPosts,
             'breadcrumbs' => $this->breadcrumbs
         ]);
     }
@@ -56,6 +58,11 @@ class BlogController extends AbstractController
      */
     public function list(\App\Repository\PostRepository $posts, int $page = 1) : \Symfony\Component\HttpFoundation\Response
     {
+        $this->breadcrumbs[] = [
+            'route' => 'blog_list',
+            'title' => 'List'
+        ];
+        
         $postsPage = $posts->getPage($page);
         
         if ($postsPage->getIterator()->count() < 1) {
@@ -72,38 +79,67 @@ class BlogController extends AbstractController
      * @Route(
      *      "/post/{slug}", 
      *      methods={"GET"}, 
-     *      name="blog_detail"
+     *      name="blog_post"
      * )
      */
     public function detail(\App\Entity\Post $post) : \Symfony\Component\HttpFoundation\Response
     {
         $this->breadcrumbs[] = [
-            'route' => 'blog_detail',
+            'route' => 'blog_list',
+            'title' => 'List'
+        ];
+        
+        $this->breadcrumbs[] = [
+            'route' => 'blog_post',
             'title' => $post->getTitle()
         ];
+        
+        $comment = new \App\Entity\Comment();
+        $commentForm = $this->createForm(\App\Form\CommentType::class, $comment);
         
         return $this->render('blog/detail.html.twig', [
             'post' => $post,
             'comments' => $post->getComments(),
+            'commentForm' => $commentForm->createView(),
             'breadcrumbs' => $this->breadcrumbs
         ]);
     }
     
     /**
      * @Route(
-     *      "/comment/add", 
+     *      "/post/{slug}/comment/add", 
      *      methods={"POST"}, 
-     *      name="comment_add"
+     *      name="blog_post_comment_add"
      * )
      */
-    public function addComment()
+    public function addComment(\Symfony\Component\HttpFoundation\Request $request)
     {
         $newComment = new \App\Entity\Comment();
-        //$newComment->setPost($post)
+        
+        $form = $this->createForm(\App\Form\CommentType::class, $newComment);
 
-        /*$form = $this->createFormBuilder($newComment)
-            ->add('text', TextType::class)
-            ->add('add', SubmitType::class, ['label' => 'Add comment'])
-            ->getForm();*/
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            $newComment = $form->getData();
+
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $entityManager->persist($newComment);
+            $entityManager->flush();
+            
+            return $this->json(
+                $this->normalizer->normalize(
+                    $newComment, 
+                    null, 
+                    [
+                        'groups' => ['view']
+                    ]
+                ),
+                200
+            );
+        } else {
+            return $this->json($data, 500);
+        }
     }
 }
