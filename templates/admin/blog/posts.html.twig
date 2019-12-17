@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Blog posts{% endblock %}
+
+{% block main %}
+    <div class="container-fluid">
+        <div class="row">
+            <a href="{{ path('admin_blog_post_new') }}" class="btn btn-primary">Add</a>
+        </div>
+        <div class="row border border-light">
+            <div class="col">
+                Title
+            </div>
+            <div class="col">
+                Created at
+            </div>
+            <div class="col">
+                Modified at
+            </div>
+            <div class="col">
+                Comments count
+            </div>
+            <div class="col">
+                Edit
+            </div>
+        </div>
+        {% for post in posts %}
+            <div class="row border border-light">
+                <div class="col">
+                    {{ post.title }}
+                </div>
+                <div class="col text-muted text-small">
+                    {{ post.createdAt|date("m/d/Y H:i") }}
+                </div>
+                <div class="col text-muted text-small">
+                    {{ post.modifiedAt|date("m/d/Y H:i") }}
+                </div>
+                <div class="col text-muted text-small">
+                    {{ post.comments|length }}
+                </div>
+                <div class="col align-items-end">
+                    <a href="{{ path('admin_blog_post_edit', {'slug': post.slug}) }}" class="btn btn-primary">Edit</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

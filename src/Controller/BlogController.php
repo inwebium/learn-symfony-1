@@ -44,7 +44,7 @@ class BlogController extends AbstractController
     
     /**
      * @Route(
-     *      "/posts", 
+     *      "/posts/", 
      *      methods={"GET"},
      *      name="blog_list"
      * )

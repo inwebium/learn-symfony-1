@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+{% block title %}New blog post{% endblock %}
+
+{% block main %}
+    <div class="container-fluid">
+        {% for error in formErrors %}
+            <div class="row">
+                {{ error }}
+            </div>
+        {% endfor %}
+        {{ form(form) }}
+        <a href="{{ path('admin_blog_posts') }}" class="btn btn-primary">Cancel</a>
+    </div>
+{% endblock %}
